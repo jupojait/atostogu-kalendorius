@@ -128,7 +128,6 @@ export default function App() {
     }
   }, [instance, user]);
 
-  // SUTVARKYTA: Saugus atostogų nuskaitymas, eliminuojantis laiko zonų paklaidas
   const loadVacationsFromSharePoint = useCallback(async () => {
     if (!user || officeUsers.length === 0) return;
     try {
@@ -151,7 +150,6 @@ export default function App() {
         const person = officeUsers.find(u => u.email?.toLowerCase() === f.DarbuotojoEmail?.toLowerCase());
         if (!person) return;
 
-        // Paverčiame į vietinę datą, kad nustumti laikai neperkeltų dienos atgal
         const d = new Date(f.AtostoguData);
         const localIsoDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
@@ -247,7 +245,6 @@ export default function App() {
     return officeUsers.filter(person => (vacations[person.id] || []).includes(date));
   }
 
-  // SUTVARKYTA: Duomenis į SharePoint siunčiame su dienos vidurio žyma (12:00), kad apsisaugotume nuo laiko zonų poslinkių
   async function saveVacation(date) {
     const token = await instance.acquireTokenSilent({ scopes: ["User.Read", "Sites.ReadWrite.All"], account: user });
     const targetPerson = officeUsers.find(x => x.id === selectedPersonId);
@@ -283,7 +280,6 @@ export default function App() {
     });
   }
 
-  // SUTVARKYTA ELEKTRONINIŲ PAŠTŲ SUTAPIMO LOGIKA SU .toLowerCase()
   async function toggleDate(date) {
     if (!selectedPersonId) return;
     const targetPerson = officeUsers.find(x => x.id === selectedPersonId);
@@ -387,7 +383,7 @@ export default function App() {
           )}
         </nav>
         <div className="sidebarFooter">
-          <strong>{user.name}</strong>
+          ...<strong>{user.name}</strong>
           <span>{user.username}</span>
           <button onClick={logout}>Atsijungti</button>
         </div>
@@ -523,40 +519,70 @@ export default function App() {
               ))}
             </section>
 
-            <section className="calendarGrid">
-              {MONTHS.map((month, monthIndex) => (
-                <div className="monthCard" key={month}>
-                  <div className="monthHeader"><h3>{month}</h3></div>
-                  <div className="weekdays">
-                    {WEEK_DAYS.map(day => <div key={day}>{day}</div>)}
-                  </div>
-                  <div className="days">
-                    {getMonthDays(year, monthIndex).map((date, index) => {
-                      if (!date) return <div key={index} />;
-                      const people = peopleOnDate(date.iso);
-                      const selectedByCurrent = people.some(p => p.id === selectedPersonId);
+            {/* ČIA GENERUOJAMI VISI 12 MĖNESIŲ SU GULSČIAIS IR ŽEMAIS LANGELIAIS */}
+            <div className="calendarGrid">
+              {MONTHS.map((monthName, monthIndex) => {
+                const days = getMonthDays(year, monthIndex);
+                return (
+                  <div className="monthCard" key={monthName}>
+                    <div className="monthHeader">
+                      <h3>{monthName}</h3>
+                    </div>
+                    
+                    <div className="weekdays">
+                      {WEEK_DAYS.map(wd => <div key={wd}>{wd}</div>)}
+                    </div>
+                    
+                    <div className="days">
+                      {days.map((d, index) => {
+                        if (!d) return <div key={`empty-${index}`} />;
+                        
+                        const people = peopleOnDate(d.iso);
+                        const isSelected = selectedPersonId && (vacations[selectedPersonId] || []).includes(d.iso);
+                        const hasVacation = people.length > 0;
+                        
+                        let classes = "day";
+                        if (d.weekend) classes += " weekend";
+                        if (hasVacation) classes += " hasVacation";
+                        if (isSelected && selectedPersonId === accounts[0]?.id) classes += " selectedByCurrent";
 
-                      return (
-                        <button
-                          key={date.iso}
-                          className={[
-                            "day",
-                            date.weekend ? "weekend" : "",
-                            people.length ? "hasVacation" : "",
-                            selectedByCurrent ? "selectedByCurrent" : ""
-                          ].join(" ")}
-                          onClick={() => toggleDate(date.iso)}
-                          title={people.length ? people.map(p => p.name).join(", ") : date.iso}
-                        >
-                          {people.length > 0 && <span className="dayFill" style={dayBackground(people)} />}
-                          <span className="dayNumber">{date.day}</span>
-                        </button>
-                      );
-                    })}
+                        return (
+                          <button 
+                            key={d.iso} 
+                            className={classes} 
+                            onClick={() => toggleDate(d.iso)}
+                          >
+                            {hasVacation && (
+                              <div className="dayFill" style={dayBackground(people)} />
+                            )}
+                            <span className="dayNumber">{d.day}</span>
+                            {people.length > 1 && (
+                              <span className="moreBadge">+{people.length}</span>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </section>
+                );
+              })}
+            </div>
+
+            <footer className="overlapLegend">
+              <strong>Persidengimai:</strong>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <span className="sample one" /> <span>1 asmuo</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <span className="sample two" /> <span>2 asmenys</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <span className="sample three" /> <span>3 asmenys</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <span className="sample many" /> <span>Daugiau</span>
+              </div>
+            </footer>
           </>
         )}
       </main>
