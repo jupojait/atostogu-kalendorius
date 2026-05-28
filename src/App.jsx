@@ -67,7 +67,7 @@ export default function App() {
 
   const [year, setYear] = useState(currentYear);
   const [loading, setLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false); // Nauja būsena rankinio mygtuko animacijai
+  const [refreshing, setRefreshing] = useState(false); 
   const [officeUsers, setOfficeUsers] = useState([]);
   const [selectedPersonId, setSelectedPersonId] = useState("");
   const [vacations, setVacations] = useState({});
@@ -134,7 +134,7 @@ export default function App() {
   const loadVacationsFromSharePoint = useCallback(async () => {
     if (!user || officeUsers.length === 0) return;
     try {
-      setRefreshing(true); // Aktyvuojam sukamąją animaciją
+      setRefreshing(true); 
       const token = await instance.acquireTokenSilent({
         scopes: ["User.Read", "Sites.ReadWrite.All"],
         account: user
@@ -157,11 +157,11 @@ export default function App() {
     } catch (e) {
       console.error("Klaida kraunant atostogas:", e);
     } finally {
-      setRefreshing(false); // Sustabdom animaciją
+      setRefreshing(false); 
     }
   }, [instance, user, officeUsers]);
 
-  // EFEKTAS 1: Vartotojų krovimas iš Graph API
+  // EFEKTAS 1: Vartotojų krovimas
   useEffect(() => {
     async function loadUsers() {
       if (!user) return;
@@ -207,40 +207,37 @@ export default function App() {
     loadUsers();
   }, [user, instance]);
 
-  // EFEKTAS 2: Atostogų krovimas, kai atsiranda vartotojai
+  // EFEKTAS 2: Atostogų krovimas pradžioje
   useEffect(() => {
     loadVacationsFromSharePoint();
   }, [loadVacationsFromSharePoint]);
 
-  // EFEKTAS: Automatinis fono sinchronizavimas kas 5 minutes (300000 ms)
+  // EFEKTAS 3: Automatinis fono sinchronizavimas kas 5 minutes
   useEffect(() => {
     if (!user || officeUsers.length === 0) return;
 
     const interval = setInterval(() => {
-      console.log("Automatiškai atnaujinami duomenys iš SharePoint...");
       loadVacationsFromSharePoint();
     }, 300000);
 
     return () => clearInterval(interval);
   }, [user, officeUsers, loadVacationsFromSharePoint]);
 
-  // EFEKTAS 3: Vartotojo nustatymai
+  // EFEKTAS 4: Vartotojo nustatymai
   useEffect(() => {
     loadUserSettings();
   }, [loadUserSettings]);
 
-  // EFEKTAS 4: Admin nustatymai
+  // EFEKTAS 5: Admin nustatymai
   useEffect(() => {
     if (isAdmin) {
       loadAllSettings();
     }
   }, [isAdmin, loadAllSettings]);
 
-  // Saugus automatinis nukreipimas (Auto-login) be strigimų
+  // Automatinis loginas be pakibimų
   useEffect(() => {
-    if (inProgress === "login" || inProgress === "handleRedirect") {
-      return;
-    }
+    if (inProgress === "login" || inProgress === "handleRedirect") return;
     if (!user && inProgress === "none") {
       instance.loginRedirect({ scopes: ["User.Read", "User.ReadBasic.All", "Sites.ReadWrite.All"] });
     }
@@ -283,23 +280,24 @@ export default function App() {
     });
   }
 
+  // SUTVARKYTA: Užtikrintas stabilus žymėjimas už save bei už kitus (jei leistina)
   async function toggleDate(date) {
     if (!selectedPersonId) return;
     const targetPerson = officeUsers.find(x => x.id === selectedPersonId);
-    if (!canManageOthers && targetPerson?.email?.toLowerCase() !== user.username?.toLowerCase()) {
-      alert("Galite žymėti tik savo atostogas.");
+    if (!targetPerson) return;
+
+    const isOwnVacation = targetPerson.email?.toLowerCase() === user.username?.toLowerCase();
+
+    // Jeigu tai ne paties vartotojo atostogos ir jis neturi administracinių teisių valdyti kitų
+    if (!isOwnVacation && !canManageOthers) {
+      alert(`Galite žymėti tik savo atostogas. Jūs pasirinkote: ${targetPerson.name}`);
       return;
     }
 
     const existing = vacations[selectedPersonId] || [];
     const exists = existing.includes(date);
 
-    if (exists) {
-      await deleteVacation(date);
-    } else {
-      await saveVacation(date);
-    }
-
+    // Greitas lokalus būsenos atnaujinimas vartotojo sąsajoje (UI)
     setVacations(prev => {
       const current = prev[selectedPersonId] || [];
       return {
@@ -307,6 +305,18 @@ export default function App() {
         [selectedPersonId]: exists ? current.filter(d => d !== date) : [...current, date].sort()
       };
     });
+
+    try {
+      if (exists) {
+        await deleteVacation(date);
+      } else {
+        await saveVacation(date);
+      }
+    } catch (error) {
+      console.error("Klaida sinchronizuojant su SharePoint:", error);
+      alert("Nepavyko išsaugoti pakeitimo debesyje. Atstatomi duomenys...");
+      loadVacationsFromSharePoint(); // Klaidos atveju pārsūcam datus
+    }
   }
 
   async function saveUserSetting(rowId) {
@@ -343,13 +353,11 @@ export default function App() {
     await loadAllSettings();
   }
 
-  // Tarpinis krovimosi ekranas su saugumo būsenos stebėjimu
   if (!user || inProgress !== "none") {
     return (
       <div className="loginPage">
         <div className="loginCard">
           <h1>Kraunama...</h1>
-          {inProgress !== "none" && <p style={{ color: "#666", fontSize: "14px" }}>Statusas: {inProgress}</p>}
         </div>
       </div>
     );
@@ -445,7 +453,6 @@ export default function App() {
                 <p>Žymėk atostogas ir iš karto matyk persidengimus komandoje.</p>
               </div>
               
-              {/* ATNAUJINTA: Čia įkeltas naujas veiksmų blokas su Atnaujinimo mygtuku */}
               <div className="topbarActions" style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                 <button 
                   className={`refreshButton ${refreshing ? "spinning" : ""}`}
@@ -542,7 +549,6 @@ export default function App() {
                         >
                           {people.length > 0 && <span className="dayFill" style={dayBackground(people)} />}
                           <span className="dayNumber">{date.day}</span>
-                          {people.length > 4 && <span className="moreBadge">4+</span>}
                         </button>
                       );
                     })}
