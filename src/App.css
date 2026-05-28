@@ -361,7 +361,8 @@ select {
 .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px !important;
+  gap: 4px;
+  align-content: start;
 }
 
 /* SUTVARKYTA: Tuštiems elementams (mėnesio pradžiai) nustatomas toks pat aukštis */
@@ -391,8 +392,9 @@ select {
 /* --- PAČIOS DIENOS IR JŲ FORMOS --- */
 .day {
   width: 100%;
-  aspect-ratio: 1 / 1;  /* ← štai čia magiška dalis */
-  height: auto !important; /* pašalinamas griežtas 30px aukštis */
+  aspect-ratio: 1 / 1;
+  height: auto !important;
+  max-height: 36px; /* ← riboja maksimalų dydį */
   
   border: 0;
   background: transparent;
