@@ -10,7 +10,7 @@ const msalInstance = new PublicClientApplication({
   auth: {
     clientId: "2b5e1bf6-1a2d-4658-899c-05f9dce12378",
     authority: "https://login.microsoftonline.com/1e98a3e5-7ec4-427a-ae35-10b2b9eade6a",
-    redirectUri: "http://localhost:5173"
+    redirectUri: "window.location.origin"
   },
   cache: {
     cacheLocation: "localStorage"
@@ -26,4 +26,3 @@ createRoot(document.getElementById("root")).render(
     </MsalProvider>
   </StrictMode>
 );
-redirectUri: window.location.origin
