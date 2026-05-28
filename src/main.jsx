@@ -26,3 +26,4 @@ createRoot(document.getElementById("root")).render(
     </MsalProvider>
   </StrictMode>
 );
+redirectUri: window.location.origin
