@@ -487,10 +487,15 @@ useEffect(() => {
     return Object.values(vacations).reduce((sum, arr) => sum + arr.length, 0);
   }, [vacations]);
 
+useEffect(() => {
+  if (!user) {
+    instance.loginRedirect({
+      scopes: ["User.Read", "User.ReadBasic.All"]
+    });
+  }
+}, [user, instance]);
+
 if (!user) {
-
-  login();
-
   return (
     <div className="loginPage">
       <div className="loginCard">
