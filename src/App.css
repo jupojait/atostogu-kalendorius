@@ -391,7 +391,8 @@ select {
 /* --- PAČIOS DIENOS IR JŲ FORMOS --- */
 .day {
   width: 100%;
-  height: 30px !important; /* Griežtas, žemas aukštis gulsčiai formai */
+  aspect-ratio: 1 / 1;  /* ← štai čia magiška dalis */
+  height: auto !important; /* pašalinamas griežtas 30px aukštis */
   
   border: 0;
   background: transparent;
