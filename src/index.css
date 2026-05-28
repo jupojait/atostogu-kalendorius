@@ -1,0 +1,57 @@
+.legend {
+  background: white;
+  padding: 14px 18px;
+  border-radius: 18px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.legendItem span {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+}
+
+.day {
+  min-height: 54px;
+  height: auto;
+  padding: 4px;
+  position: relative;
+}
+
+.dayNumber {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.peopleDots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  justify-content: center;
+}
+
+.personDot {
+  color: white;
+  font-size: 9px;
+  line-height: 16px;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  padding: 0 3px;
+  font-weight: 700;
+}
+
+.selectedCurrent {
+  outline: 3px solid #111827;
+}
