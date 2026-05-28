@@ -1,3 +1,6 @@
+/* ==========================================================================
+   1. PAGRINDINIAI NUSTATYMAI IR BENDRI STILIAI
+   ========================================================================== */
 body {
   margin: 0;
   font-family: Segoe UI, Arial, sans-serif;
@@ -10,7 +13,7 @@ select {
   font: inherit;
 }
 
-/* --- PRISITAIKANTIS LOGIN --- */
+/* --- LOGIN PUSLAPIS --- */
 .loginPage {
   min-height: 100vh;
   display: grid;
@@ -21,7 +24,7 @@ select {
 
 .loginCard {
   width: 100%;
-  max-width: 420px; /* kad telefone neišliptų iš ekrano */
+  max-width: 420px;
   background: white;
   border-radius: 28px;
   padding: 36px 24px;
@@ -55,7 +58,9 @@ select {
   font-weight: 700;
 }
 
-/* --- LANKSČIŲJŲ RĖMŲ STRUKTŪRA --- */
+/* ==========================================================================
+   2. STRUKTŪRA (STRUKTŪRINIAI RĖMAI IR ŠONINIS MENIU)
+   ========================================================================== */
 .appShell {
   display: flex;
   min-height: 100vh;
@@ -91,6 +96,8 @@ select {
   margin-bottom: 8px;
   color: #475569;
   font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .navItem.active {
@@ -113,23 +120,25 @@ select {
   padding: 10px 14px;
   cursor: pointer;
   font-weight: 700;
-  width: 100%; /* pilnas plotis meniu apačioje */
+  width: 100%;
 }
 
 .main {
   flex: 1;
   padding: 28px;
-  min-width: 0; /* LABAI SVARBU: leidžia turiniui susitraukti viduje be horizontalios slinkties */
+  min-width: 0; /* Leidžia turiniui saugiai susitraukti be horizontalios slinkties */
 }
 
-/* --- VIRŠUTINĖ JUOSTA (Topbar) --- */
+/* ==========================================================================
+   3. VIRŠUTINĖ JUOSTA (TOPBAR IR VALDYMAS)
+   ========================================================================== */
 .topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 22px;
   gap: 16px;
-  flex-wrap: wrap; /* jei netelpa mygtukai, tvarkingai kelia į kitą eilutę */
+  flex-wrap: wrap;
 }
 
 .topbar h1 {
@@ -212,10 +221,11 @@ select {
   font-size: 20px;
 }
 
-/* --- SUVESTINĖS KORTELĖS --- */
+/* ==========================================================================
+   4. INFORMACINĖS PLOKŠTĖS IR DARBUOTOJŲ SĄRAŠAS
+   ========================================================================== */
 .summaryGrid {
   display: grid;
-  /* automatiškai generuoja stulpelius pagal ekrano plotį (ne mažesnius nei 220px) */
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 14px;
   margin-bottom: 16px;
@@ -240,7 +250,7 @@ select {
 
 .summaryCard strong {
   font-size: 22px;
-  word-break: break-word; /* apsaugo nuo ilgų vardų išlipimo */
+  word-break: break-word;
 }
 
 .summaryCard small {
@@ -268,7 +278,6 @@ select {
   font-weight: 700;
 }
 
-/* --- DARBUOTOJŲ JUOSTA --- */
 .peopleLegend {
   background: white;
   border: 1px solid #e5e7eb;
@@ -276,7 +285,7 @@ select {
   padding: 14px;
   display: flex;
   gap: 10px;
-  overflow-x: auto; /* leidžia švelniai prasukti žmones, jei netelpa */
+  overflow-x: auto;
   margin-bottom: 18px;
   -webkit-overflow-scrolling: touch;
 }
@@ -292,7 +301,7 @@ select {
   align-items: center;
   cursor: pointer;
   text-align: left;
-  flex-shrink: 0; /* neleidžia suspausti pačių kortelių prasukant */
+  flex-shrink: 0;
 }
 
 .personChip.selected {
@@ -321,35 +330,43 @@ select {
   font-size: 11px;
 }
 
-/* --- SUTVARKYTAS KALENDORIAUS TINKLELIS --- */
+/* ==========================================================================
+   5. SUTVARKYTAS KALENDORIUS (DIENOS IR JŲ TARPAI)
+   ========================================================================== */
 .calendarGrid {
   display: grid;
-  /* Protingas išdėstymas: stengiasi talpinti po 4/3 stulpelius, mažėjant ekranui pats mažina jų skaičių */
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 14px;
+  gap: 18px; /* Didesnis tarpas tarp pačių mėnesių kortelių */
 }
 
 .monthCard {
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 22px;
-  padding: 14px;
+  padding: 16px;
   box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
   display: flex;
   flex-direction: column;
 }
 
 .monthHeader h3 {
-  margin: 0 0 12px;
+  margin: 0 0 14px;
   font-size: 18px;
   text-align: center;
 }
 
-.weekdays,
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
 .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 2px; /* sumažinam tarpelį, kad langeliai turėtų vietos kvėpuoti */
+  gap: 6px !important; /* Sukuria aiškius vizualius tarpus tarp dienų mygtukų */
+  padding: 2px 0;
 }
 
 .weekdays div {
@@ -364,61 +381,71 @@ select {
   color: #dc2626;
 }
 
-/* --- DIENŲ KVADRATAI --- */
-
+/* --- PAČIOS DIENOS IR JŲ HOVER REAKCIJA --- */
 .day {
-  aspect-ratio: 1; /* išlaiko tobulą kvadratą */
+  aspect-ratio: 1 / 1; /* Griežtas tobulas kvadratas */
+  width: 100%;
   border: 0;
   background: #f8fafc;
-  border-radius: 6px;
+  border-radius: 8px; /* Suapvalinti kampai, kurie dabar bus nukirpti */
   cursor: pointer;
   position: relative;
-  overflow: hidden; /* LABAI SVARBU: nukerta spalvą, kad ji neišliptų už apvalių kampų */
+  overflow: hidden; /* LABAI SVARBU: nukerta fono spalvas, kad neišliptų už kampų */
   font-weight: 700;
   color: #0f172a;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  box-sizing: border-box;
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s ease;
 }
 
-/* SUTVARKYTA: Užėjus pelia (hover) langelis grakščiai padidėja, bet neišstumia kitų dienų */
+/* Užėjus pele: mygtukas grakščiai padidėja, bet stovi vietoje ir neišstumia kaimynų */
 .day:hover {
-  transform: scale(1.08);
-  z-index: 10; /* iškelia virš kitų dienų prasiplėtus */
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+  transform: scale(1.15);
+  z-index: 10;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25) !important;
+  border-radius: 8px;
 }
 
-/* Fono spalvos užpildymas – dabar idealiai guli viduje */
+/* Užpildo spalva – idealiai sėdi rėmelių viduje */
 .dayFill {
   position: absolute;
-  inset: 0; /* užpildo lygiai nuo krašto iki krašto */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 1;
   opacity: 0.95;
+  border-radius: 8px;
 }
 
 .dayNumber {
   position: relative;
   z-index: 2;
-  pointer-events: none; /* kad skaičius netrukdytų paspaudimui */
+  pointer-events: none;
 }
 
-/* SUTVARKYTA: Pasirinktas langelis gauna vidinį rėmelį, kuris nepadidina paties mygtuko dydžio */
-.selectedByCurrent {
-  box-shadow: inset 0 0 0 3px #111827;
-}
-
-
-.weekend {
+/* Savaitgaliai */
+.day.weekend {
+  background: #fff1f2;
   color: #dc2626;
 }
 
-.hasVacation {
-  background: white;
+.day.weekend.hasVacation .dayNumber {
+  color: #dc2626;
 }
 
+/* Kai užžymėta atostogomis – išvalom senąjį foną, kad dominuotų dayFill */
+.hasVacation {
+  background: transparent;
+}
 
+/* Kai vartotojas pats paspaudžia ant dienos (Vidinis rėmelis, kuris nedidina objekto) */
+.selectedByCurrent {
+  box-shadow: inset 0 0 0 3px #111827 !important;
+}
 
 .moreBadge {
   position: absolute;
@@ -458,12 +485,14 @@ select {
 .sample.four { background: conic-gradient(#22c55e 0deg 90deg, #3b82f6 90deg 180deg, #f97316 180deg 270deg, #8b5cf6 270deg 360deg); }
 .sample.many { background: repeating-linear-gradient(45deg, #22c55e 0 6px, #3b82f6 6px 12px, #f97316 12px 18px, #8b5cf6 18px 24px); }
 
-/* --- NUSTATYMŲ LANKSTUMAS --- */
+/* ==========================================================================
+   6. NUSTATYMŲ PUSLAPIO LANKSTUMAS
+   ========================================================================== */
 .settingsTable {
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 20px;
-  overflow-x: auto; /* Jei lentelė netelpa mažame ekrane, atsiras vidinė slinktis, o ne sulaužys puslapį */
+  overflow-x: auto;
 }
 
 .settingsHeader,
@@ -473,7 +502,7 @@ select {
   gap: 12px;
   align-items: center;
   padding: 14px 18px;
-  min-width: 650px; /* išlaiko stulpelių proporcijas prasukant lentelę */
+  min-width: 650px;
 }
 
 .settingsHeader {
@@ -530,9 +559,8 @@ select {
 }
 
 /* ==========================================================================
-   PAPILDOMI MEDIA QUERY REŽIMAI VISIŠKAM RESPONSIVE INTEGRAVIMUI (TEAMS & MOBILE)
+   7. EKRAREKOMENDACIJOS (RESPONSIVE MEDIA QUERIES)
    ========================================================================== */
-
 @media (max-width: 1024px) {
   .main {
     padding: 20px;
@@ -543,7 +571,6 @@ select {
 }
 
 @media (max-width: 900px) {
-  /* Atstatome tavo paslėptą sidebar, bet paverčiame jį lanksčiu viršutiniu meniu mobiliems / mažiems Teams langams */
   .appShell {
     flex-direction: column;
   }
@@ -576,7 +603,7 @@ select {
   }
 
   .sidebarFooter {
-    display: none; /* Paslepiam apačią mažame ekrane, kad neužimtų vietos */
+    display: none;
   }
 }
 
