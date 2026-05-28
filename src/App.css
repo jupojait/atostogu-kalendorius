@@ -382,17 +382,13 @@ select {
 
 /* --- PAČIOS DIENOS IR JŲ HOVER REAKCIJA --- */
 .day {
-  /* PANIKINAM visus senus išsitempimus ir nustatom tobulą mažą kvadratą */
-  width: 32px !important;  /* Užfiksuojam plotį */
-  height: 32px !important; /* Užfiksuojam aukštį – jokių aukštų kapsulių! */
+  width: 100%;
+  height: 30px !important; /* Ši eilutė sumažina aukštį ir padaro langelį gulsčią, kaip tavo piešinyje */
   
   border: 0;
-  background: #f8fafc;
-  border-radius: 8px; /* Kad kvadratėlis turėtų gražius suapvalintus kampus */
+  background: transparent;
   cursor: pointer;
   position: relative;
-  overflow: hidden; /* Nukerta spalvas, kad jos neišliptų už kampų */
-  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -411,10 +407,8 @@ select {
 /* Spalvotas užpildymas viduje */
 .dayFill {
   position: absolute;
-  inset: 0; /* Pilnai užpildo kvadratėlio vidų */
+  inset: 0;
   z-index: 1;
-  opacity: 0.95;
-  border-radius: 8px;
 }
 
 .dayNumber {
@@ -422,7 +416,6 @@ select {
   z-index: 2;
   font-weight: 700;
   font-size: 13px;
-  color: #0f172a;
 }
 
 /* Savaitgaliai */
