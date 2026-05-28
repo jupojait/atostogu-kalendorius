@@ -335,8 +335,9 @@ select {
    ========================================================================== */
 .calendarGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 18px; /* Didesnis tarpas tarp pačių mėnesių kortelių */
+  /* Kadangi kortelės tapo siauresnės, dabar monitoriuje lengvai tilps 4 ar net daugiau mėnesių eilutėje */
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
 }
 
 .monthCard {
@@ -365,7 +366,7 @@ select {
 .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 6px !important; /* Sukuria aiškius vizualius tarpus tarp dienų mygtukų */
+  gap: 4px !important; /* Šiek tiek sumažinam tarpelį, kad taupytume vietą */
   padding: 2px 0;
 }
 
@@ -383,14 +384,16 @@ select {
 
 /* --- PAČIOS DIENOS IR JŲ HOVER REAKCIJA --- */
 .day {
-  aspect-ratio: 1 / 1; /* Griežtas tobulas kvadratas */
+  aspect-ratio: 1 / 1; /* Išlaiko tobulą kvadratą */
   width: 100%;
+  max-width: 36px; /* APRIBOJIMAS: Neleidžia langeliui išsipūsti per daug */
+  margin: 0 auto; /* Centruoja kvadratėlį savo stulpelyje */
   border: 0;
   background: #f8fafc;
-  border-radius: 8px; /* Suapvalinti kampai, kurie dabar bus nukirpti */
+  border-radius: 8px;
   cursor: pointer;
   position: relative;
-  overflow: hidden; /* LABAI SVARBU: nukerta fono spalvas, kad neišliptų už kampų */
+  overflow: hidden;
   font-weight: 700;
   color: #0f172a;
   display: flex;
