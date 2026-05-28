@@ -366,8 +366,9 @@ select {
 .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px !important; /* Šiek tiek sumažinam tarpelį, kad taupytume vietą */
-  padding: 2px 0;
+  gap: 4px !important;
+  justify-items: center; /* Centruoja kvadratėlius stulpelių viduje, kad aplink liktų laisvos vietos */
+  padding: 4px 0;
 }
 
 .weekdays div {
@@ -384,17 +385,18 @@ select {
 
 /* --- PAČIOS DIENOS IR JŲ HOVER REAKCIJA --- */
 .day {
-  aspect-ratio: 1 / 1; /* Išlaiko tobulą kvadratą */
-  width: 100%;
-  max-width: 36px; /* APRIBOJIMAS: Neleidžia langeliui išsipūsti per daug */
-  margin: 0 auto; /* Centruoja kvadratėlį savo stulpelyje */
+  /* Griežtai užfiksuojam vienodą dydį, kad langeliai nevirstų kapsulėmis */
+  width: 32px !important;
+  height: 32px !important;
+  
   border: 0;
   background: #f8fafc;
-  border-radius: 8px;
+  border-radius: 8px; /* Gražus, proporcingas suapvalinimas mažesniam kvadratui */
   cursor: pointer;
   position: relative;
   overflow: hidden;
   font-weight: 700;
+  font-size: 13px; /* Šiek tiek sumažinam šriftą, kad idealiai tiktų į 32px dėžutę */
   color: #0f172a;
   display: flex;
   align-items: center;
@@ -404,21 +406,17 @@ select {
   transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s ease;
 }
 
-/* Užėjus pele: mygtukas grakščiai padidėja, bet stovi vietoje ir neišstumia kaimynų */
+/* Hover efektas išlieka saugus ir gražus */
 .day:hover {
   transform: scale(1.15);
   z-index: 10;
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.25) !important;
-  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2) !important;
 }
 
-/* Užpildo spalva – idealiai sėdi rėmelių viduje */
+/* Fono spalvos dabar idealiai dengia 32x32 plotą */
 .dayFill {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   z-index: 1;
   opacity: 0.95;
   border-radius: 8px;
