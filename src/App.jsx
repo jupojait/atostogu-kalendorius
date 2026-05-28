@@ -128,6 +128,7 @@ export default function App() {
     }
   }, [instance, user]);
 
+  // SUTVARKYTA: Saugus atostogų nuskaitymas, eliminuojantis laiko zonų paklaidas
   const loadVacationsFromSharePoint = useCallback(async () => {
     if (!user || officeUsers.length === 0) return;
     try {
@@ -145,10 +146,17 @@ export default function App() {
 
       (data.value || []).forEach(item => {
         const f = item.fields;
+        if (!f.AtostoguData) return;
+
         const person = officeUsers.find(u => u.email?.toLowerCase() === f.DarbuotojoEmail?.toLowerCase());
         if (!person) return;
+
+        // Paverčiame į vietinę datą, kad nustumti laikai neperkeltų dienos atgal
+        const d = new Date(f.AtostoguData);
+        const localIsoDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
         if (!loaded[person.id]) loaded[person.id] = [];
-        loaded[person.id].push(f.AtostoguData?.slice(0, 10));
+        loaded[person.id].push(localIsoDate);
       });
       setVacations(loaded);
     } catch (e) {
@@ -239,14 +247,17 @@ export default function App() {
     return officeUsers.filter(person => (vacations[person.id] || []).includes(date));
   }
 
+  // SUTVARKYTA: Duomenis į SharePoint siunčiame su dienos vidurio žyma (12:00), kad apsisaugotume nuo laiko zonų poslinkių
   async function saveVacation(date) {
     const token = await instance.acquireTokenSilent({ scopes: ["User.Read", "Sites.ReadWrite.All"], account: user });
     const targetPerson = officeUsers.find(x => x.id === selectedPersonId);
+    const safeDateTime = `${date}T12:00:00Z`;
+
     await fetch(`https://graph.microsoft.com/v1.0/sites/${SITE_ID}/lists/${LIST_ID}/items`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token.accessToken}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        fields: { Title: targetPerson.name, Metai: year, AtostoguData: date, DarbuotojoEmail: targetPerson.email }
+        fields: { Title: targetPerson.name, Metai: year, AtostoguData: safeDateTime, DarbuotojoEmail: targetPerson.email }
       })
     });
   }
@@ -258,9 +269,12 @@ export default function App() {
       headers: { Authorization: `Bearer ${token.accessToken}` }
     });
     const data = await response.json();
-    const item = (data.value || []).find(x => 
-      x.fields.DarbuotojoEmail?.toLowerCase() === targetPerson.email?.toLowerCase() && x.fields.AtostoguData?.slice(0, 10) === date
-    );
+    const item = (data.value || []).find(x => {
+      if (!x.fields.AtostoguData) return false;
+      const d = new Date(x.fields.AtostoguData);
+      const itemLocalDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      return x.fields.DarbuotojoEmail?.toLowerCase() === targetPerson.email?.toLowerCase() && itemLocalDate === date;
+    });
     if (!item) return;
 
     await fetch(`https://graph.microsoft.com/v1.0/sites/${SITE_ID}/lists/${LIST_ID}/items/${item.id}`, {
@@ -269,7 +283,7 @@ export default function App() {
     });
   }
 
-  // SUTVARKYTA FUNKCIJA: Nustatymai veikia, o didžiosios raidės ignoruojamos
+  // SUTVARKYTA ELEKTRONINIŲ PAŠTŲ SUTAPIMO LOGIKA SU .toLowerCase()
   async function toggleDate(date) {
     if (!selectedPersonId) return;
     const targetPerson = officeUsers.find(x => x.id === selectedPersonId);
@@ -277,7 +291,6 @@ export default function App() {
 
     const isOwnVacation = targetPerson.email?.toLowerCase() === user.username?.toLowerCase();
 
-    // Jeigu vartotojas neturi teisės valdyti kitų ir bando žymėti ne sau – stabdom veiksmą
     if (!canManageOthers && !isOwnVacation) {
       alert(`Galite žymėti tik savo atostogas. Pasirinktas asmuo: ${targetPerson.name}`);
       return;
