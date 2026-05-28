@@ -83,7 +83,7 @@ if (people.length === 1) {
 }
 
 export default function App() {
-  const { instance, accounts } = useMsal();
+  const { instance, accounts, inProgress } = useMsal();
 
   const user = accounts[0];
 
@@ -102,7 +102,7 @@ const [newSettingsUserId, setNewSettingsUserId] = useState("");
 
   async function login() {
     await instance.loginRedirect({
-      scopes: ["User.Read", "User.ReadBasic.All"]
+      scopes: ["User.Read", "User.ReadBasic.All", "Sites.ReadWrite.All"]
     });
   }
 
@@ -488,12 +488,12 @@ useEffect(() => {
   }, [vacations]);
 
 useEffect(() => {
-  if (!user) {
+  if (!user && inProgress === "none") {
     instance.loginRedirect({
-      scopes: ["User.Read", "User.ReadBasic.All"]
+      scopes: ["User.Read", "User.ReadBasic.All", "Sites.ReadWrite.All"]
     });
   }
-}, [user, instance]);
+}, [user, inProgress, instance]);
 
 if (!user) {
   return (
