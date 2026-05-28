@@ -67,6 +67,7 @@ export default function App() {
 
   const [year, setYear] = useState(currentYear);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false); // Nauja būsena rankinio mygtuko animacijai
   const [officeUsers, setOfficeUsers] = useState([]);
   const [selectedPersonId, setSelectedPersonId] = useState("");
   const [vacations, setVacations] = useState({});
@@ -80,7 +81,7 @@ export default function App() {
 
   const logout = () => instance.logoutRedirect();
 
-  // Užkraunam visus nustatymus (naudojam useCallback, kad išvengtume ciklo)
+  // Užkraunam visus nustatymus
   const loadAllSettings = useCallback(async () => {
     if (!user) return;
     try {
@@ -129,9 +130,11 @@ export default function App() {
     }
   }, [instance, user]);
 
+  // Užkraunam atostogas iš SharePoint
   const loadVacationsFromSharePoint = useCallback(async () => {
     if (!user || officeUsers.length === 0) return;
     try {
+      setRefreshing(true); // Aktyvuojam sukamąją animaciją
       const token = await instance.acquireTokenSilent({
         scopes: ["User.Read", "Sites.ReadWrite.All"],
         account: user
@@ -153,10 +156,12 @@ export default function App() {
       setVacations(loaded);
     } catch (e) {
       console.error("Klaida kraunant atostogas:", e);
+    } finally {
+      setRefreshing(false); // Sustabdom animaciją
     }
   }, [instance, user, officeUsers]);
 
-  // EFEKTAS 1: Vartotojų krovimas
+  // EFEKTAS 1: Vartotojų krovimas iš Graph API
   useEffect(() => {
     async function loadUsers() {
       if (!user) return;
@@ -207,20 +212,35 @@ export default function App() {
     loadVacationsFromSharePoint();
   }, [loadVacationsFromSharePoint]);
 
+  // EFEKTAS: Automatinis fono sinchronizavimas kas 5 minutes (300000 ms)
+  useEffect(() => {
+    if (!user || officeUsers.length === 0) return;
+
+    const interval = setInterval(() => {
+      console.log("Automatiškai atnaujinami duomenys iš SharePoint...");
+      loadVacationsFromSharePoint();
+    }, 300000);
+
+    return () => clearInterval(interval);
+  }, [user, officeUsers, loadVacationsFromSharePoint]);
+
   // EFEKTAS 3: Vartotojo nustatymai
   useEffect(() => {
     loadUserSettings();
   }, [loadUserSettings]);
 
-  // EFEKTAS 4: Admin nustatymai (SUTVARKYTA: Paleidžiama tik vieną kartą, kai pasikeičia isAdmin)
+  // EFEKTAS 4: Admin nustatymai
   useEffect(() => {
     if (isAdmin) {
       loadAllSettings();
     }
   }, [isAdmin, loadAllSettings]);
 
-  // Nukreipimas į prisijungimą
+  // Saugus automatinis nukreipimas (Auto-login) be strigimų
   useEffect(() => {
+    if (inProgress === "login" || inProgress === "handleRedirect") {
+      return;
+    }
     if (!user && inProgress === "none") {
       instance.loginRedirect({ scopes: ["User.Read", "User.ReadBasic.All", "Sites.ReadWrite.All"] });
     }
@@ -289,7 +309,6 @@ export default function App() {
     });
   }
 
-  // PATAISYTA: čia naudojame ID suradimui iš naujausios būsenos
   async function saveUserSetting(rowId) {
     const currentRow = settingsRows.find(r => r.itemId === rowId);
     if (!currentRow) return;
@@ -324,10 +343,14 @@ export default function App() {
     await loadAllSettings();
   }
 
-  if (!user) {
+  // Tarpinis krovimosi ekranas su saugumo būsenos stebėjimu
+  if (!user || inProgress !== "none") {
     return (
       <div className="loginPage">
-        <div className="loginCard"><h1>Kraunama...</h1></div>
+        <div className="loginCard">
+          <h1>Kraunama...</h1>
+          {inProgress !== "none" && <p style={{ color: "#666", fontSize: "14px" }}>Statusas: {inProgress}</p>}
+        </div>
       </div>
     );
   }
@@ -421,10 +444,26 @@ export default function App() {
                 <h1>Metinis atostogų kalendorius</h1>
                 <p>Žymėk atostogas ir iš karto matyk persidengimus komandoje.</p>
               </div>
-              <div className="yearPicker">
-                <button onClick={() => setYear(year - 1)}>‹</button>
-                <strong>{year}</strong>
-                <button onClick={() => setYear(year + 1)}>›</button>
+              
+              {/* ATNAUJINTA: Čia įkeltas naujas veiksmų blokas su Atnaujinimo mygtuku */}
+              <div className="topbarActions" style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                <button 
+                  className={`refreshButton ${refreshing ? "spinning" : ""}`}
+                  onClick={loadVacationsFromSharePoint}
+                  disabled={refreshing || loading}
+                  title="Atnaujinti duomenis iš SharePoint"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                  </svg>
+                  <span>Atnaujinti</span>
+                </button>
+
+                <div className="yearPicker">
+                  <button onClick={() => setYear(year - 1)}>‹</button>
+                  <strong>{year}</strong>
+                  <button onClick={() => setYear(year + 1)}>›</button>
+                </div>
               </div>
             </header>
 

@@ -477,3 +477,55 @@ select {
   font-weight: 700;
   cursor: pointer;
 }
+/* Viršutinės juostos elementų grupavimas */
+.topbarActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Gražus atnaujinimo mygtukas */
+.refreshButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.refreshButton:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+.refreshButton:active {
+  transform: scale(0.98);
+}
+
+.refreshButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Sukimosi animacija (Spinning), kai kraunasi */
+.refreshButton.spinning svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
