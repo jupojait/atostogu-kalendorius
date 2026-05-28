@@ -81,7 +81,6 @@ export default function App() {
 
   const logout = () => instance.logoutRedirect();
 
-  // Užkraunam visus nustatymus
   const loadAllSettings = useCallback(async () => {
     if (!user) return;
     try {
@@ -108,7 +107,6 @@ export default function App() {
     }
   }, [instance, user]);
 
-  // Užkraunam prisijungusio vartotojo nustatymus
   const loadUserSettings = useCallback(async () => {
     if (!user) return;
     try {
@@ -130,7 +128,6 @@ export default function App() {
     }
   }, [instance, user]);
 
-  // Užkraunam atostogas iš SharePoint
   const loadVacationsFromSharePoint = useCallback(async () => {
     if (!user || officeUsers.length === 0) return;
     try {
@@ -161,7 +158,6 @@ export default function App() {
     }
   }, [instance, user, officeUsers]);
 
-  // EFEKTAS 1: Vartotojų krovimas
   useEffect(() => {
     async function loadUsers() {
       if (!user) return;
@@ -207,35 +203,28 @@ export default function App() {
     loadUsers();
   }, [user, instance]);
 
-  // EFEKTAS 2: Atostogų krovimas pradžioje
   useEffect(() => {
     loadVacationsFromSharePoint();
   }, [loadVacationsFromSharePoint]);
 
-  // EFEKTAS 3: Automatinis fono sinchronizavimas kas 5 minutes
   useEffect(() => {
     if (!user || officeUsers.length === 0) return;
-
     const interval = setInterval(() => {
       loadVacationsFromSharePoint();
     }, 300000);
-
     return () => clearInterval(interval);
   }, [user, officeUsers, loadVacationsFromSharePoint]);
 
-  // EFEKTAS 4: Vartotojo nustatymai
   useEffect(() => {
     loadUserSettings();
   }, [loadUserSettings]);
 
-  // EFEKTAS 5: Admin nustatymai
   useEffect(() => {
     if (isAdmin) {
       loadAllSettings();
     }
   }, [isAdmin, loadAllSettings]);
 
-  // Automatinis loginas be pakibimų
   useEffect(() => {
     if (inProgress === "login" || inProgress === "handleRedirect") return;
     if (!user && inProgress === "none") {
@@ -280,7 +269,7 @@ export default function App() {
     });
   }
 
-  // SUTVARKYTA: Užtikrintas stabilus žymėjimas už save bei už kitus (jei leistina)
+  // SUTVARKYTA FUNKCIJA: Nustatymai veikia, o didžiosios raidės ignoruojamos
   async function toggleDate(date) {
     if (!selectedPersonId) return;
     const targetPerson = officeUsers.find(x => x.id === selectedPersonId);
@@ -288,16 +277,15 @@ export default function App() {
 
     const isOwnVacation = targetPerson.email?.toLowerCase() === user.username?.toLowerCase();
 
-    // Jeigu tai ne paties vartotojo atostogos ir jis neturi administracinių teisių valdyti kitų
-    if (!isOwnVacation && !canManageOthers) {
-      alert(`Galite žymėti tik savo atostogas. Jūs pasirinkote: ${targetPerson.name}`);
+    // Jeigu vartotojas neturi teisės valdyti kitų ir bando žymėti ne sau – stabdom veiksmą
+    if (!canManageOthers && !isOwnVacation) {
+      alert(`Galite žymėti tik savo atostogas. Pasirinktas asmuo: ${targetPerson.name}`);
       return;
     }
 
     const existing = vacations[selectedPersonId] || [];
     const exists = existing.includes(date);
 
-    // Greitas lokalus būsenos atnaujinimas vartotojo sąsajoje (UI)
     setVacations(prev => {
       const current = prev[selectedPersonId] || [];
       return {
@@ -315,7 +303,7 @@ export default function App() {
     } catch (error) {
       console.error("Klaida sinchronizuojant su SharePoint:", error);
       alert("Nepavyko išsaugoti pakeitimo debesyje. Atstatomi duomenys...");
-      loadVacationsFromSharePoint(); // Klaidos atveju pārsūcam datus
+      loadVacationsFromSharePoint(); 
     }
   }
 
