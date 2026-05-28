@@ -10,18 +10,21 @@ select {
   font: inherit;
 }
 
+/* --- PRISITAIKANTIS LOGIN --- */
 .loginPage {
   min-height: 100vh;
   display: grid;
   place-items: center;
   background: linear-gradient(135deg, #eff6ff, #f0fdf4);
+  padding: 16px;
 }
 
 .loginCard {
-  width: 420px;
+  width: 100%;
+  max-width: 420px; /* kad telefone neišliptų iš ekrano */
   background: white;
   border-radius: 28px;
-  padding: 36px;
+  padding: 36px 24px;
   box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
   text-align: center;
 }
@@ -52,6 +55,7 @@ select {
   font-weight: 700;
 }
 
+/* --- LANKSČIŲJŲ RĖMŲ STRUKTŪRA --- */
 .appShell {
   display: flex;
   min-height: 100vh;
@@ -64,6 +68,7 @@ select {
   padding: 24px;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0; /* Neleidžia Teams'ams suspausti šoninio meniu pločio */
 }
 
 .brand {
@@ -108,18 +113,23 @@ select {
   padding: 10px 14px;
   cursor: pointer;
   font-weight: 700;
+  width: 100%; /* pilnas plotis meniu apačioje */
 }
 
 .main {
   flex: 1;
   padding: 28px;
+  min-width: 0; /* LABAI SVARBU: leidžia turiniui susitraukti viduje be horizontalios slinkties */
 }
 
+/* --- VIRŠUTINĖ JUOSTA (Topbar) --- */
 .topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 22px;
+  gap: 16px;
+  flex-wrap: wrap; /* jei netelpa mygtukai, tvarkingai kelia į kitą eilutę */
 }
 
 .topbar h1 {
@@ -130,6 +140,54 @@ select {
 .topbar p {
   margin: 6px 0 0;
   color: #64748b;
+}
+
+.topbarActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.refreshButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  white-space: nowrap;
+}
+
+.refreshButton:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+.refreshButton:active {
+  transform: scale(0.98);
+}
+
+.refreshButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.refreshButton.spinning svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .yearPicker {
@@ -144,19 +202,21 @@ select {
 .yearPicker button {
   border: 0;
   background: white;
-  padding: 14px 20px;
-  font-size: 28px;
+  padding: 10px 16px;
+  font-size: 24px;
   cursor: pointer;
 }
 
 .yearPicker strong {
-  padding: 0 28px;
-  font-size: 24px;
+  padding: 0 20px;
+  font-size: 20px;
 }
 
+/* --- SUVESTINĖS KORTELĖS --- */
 .summaryGrid {
   display: grid;
-  grid-template-columns: 1.4fr 1.4fr 1fr 1fr;
+  /* automatiškai generuoja stulpelius pagal ekrano plotį (ne mažesnius nei 220px) */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 14px;
   margin-bottom: 16px;
 }
@@ -166,6 +226,9 @@ select {
   border: 1px solid #e5e7eb;
   border-radius: 20px;
   padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .summaryCard span {
@@ -177,6 +240,7 @@ select {
 
 .summaryCard strong {
   font-size: 22px;
+  word-break: break-word; /* apsaugo nuo ilgų vardų išlipimo */
 }
 
 .summaryCard small {
@@ -191,6 +255,7 @@ select {
   border-radius: 12px;
   padding: 10px;
   outline: none;
+  background: white;
 }
 
 .notice {
@@ -203,6 +268,7 @@ select {
   font-weight: 700;
 }
 
+/* --- DARBUOTOJŲ JUOSTA --- */
 .peopleLegend {
   background: white;
   border: 1px solid #e5e7eb;
@@ -210,8 +276,9 @@ select {
   padding: 14px;
   display: flex;
   gap: 10px;
-  overflow-x: auto;
+  overflow-x: auto; /* leidžia švelniai prasukti žmones, jei netelpa */
   margin-bottom: 18px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .personChip {
@@ -225,6 +292,7 @@ select {
   align-items: center;
   cursor: pointer;
   text-align: left;
+  flex-shrink: 0; /* neleidžia suspausti pačių kortelių prasukant */
 }
 
 .personChip.selected {
@@ -253,9 +321,11 @@ select {
   font-size: 11px;
 }
 
+/* --- SUTVARKYTAS KALENDORIAUS TINKLELIS --- */
 .calendarGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* Protingas išdėstymas: stengiasi talpinti po 4/3 stulpelius, mažėjant ekranui pats mažina jų skaičių */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 14px;
 }
 
@@ -265,11 +335,14 @@ select {
   border-radius: 22px;
   padding: 14px;
   box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
 }
 
 .monthHeader h3 {
   margin: 0 0 12px;
   font-size: 18px;
+  text-align: center;
 }
 
 .weekdays,
@@ -291,8 +364,10 @@ select {
   color: #dc2626;
 }
 
+/* --- DIENŲ KVADRATAI --- */
 .day {
-  height: 34px;
+  aspect-ratio: 1; /* Garantuoja, kad dienos visada išliks tobulai kvadratinės, nesvarbu kaip keisis plotis */
+  height: auto; /* panaikinam fiksuotą aukštį lankstumui */
   border: 0;
   background: #f8fafc;
   border-radius: 9px;
@@ -301,6 +376,9 @@ select {
   overflow: hidden;
   font-weight: 700;
   color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .day:hover {
@@ -329,6 +407,7 @@ select {
 
 .selectedByCurrent {
   outline: 3px solid #111827;
+  outline-offset: -3px; /* kad kontūras liktų langelio viduje */
 }
 
 .moreBadge {
@@ -343,6 +422,7 @@ select {
   font-size: 9px;
 }
 
+/* --- PERSIDENGIMŲ LEGENDA --- */
 .overlapLegend {
   margin-top: 18px;
   background: white;
@@ -362,63 +442,18 @@ select {
   display: inline-block;
 }
 
-.sample.one {
-  background: linear-gradient(135deg, #22c55e 0 50%, transparent 50% 100%);
-}
+.sample.one { background: linear-gradient(135deg, #22c55e 0 50%, transparent 50% 100%); }
+.sample.two { background: linear-gradient(135deg, #22c55e 0 50%, #3b82f6 50% 100%); }
+.sample.three { background: conic-gradient(#22c55e 0deg 120deg, #3b82f6 120deg 240deg, #f97316 240deg 360deg); }
+.sample.four { background: conic-gradient(#22c55e 0deg 90deg, #3b82f6 90deg 180deg, #f97316 180deg 270deg, #8b5cf6 270deg 360deg); }
+.sample.many { background: repeating-linear-gradient(45deg, #22c55e 0 6px, #3b82f6 6px 12px, #f97316 12px 18px, #8b5cf6 18px 24px); }
 
-.sample.two {
-  background: linear-gradient(135deg, #22c55e 0 50%, #3b82f6 50% 100%);
-}
-
-.sample.three {
-  background: conic-gradient(#22c55e 0deg 120deg, #3b82f6 120deg 240deg, #f97316 240deg 360deg);
-}
-
-.sample.four {
-  background: conic-gradient(#22c55e 0deg 90deg, #3b82f6 90deg 180deg, #f97316 180deg 270deg, #8b5cf6 270deg 360deg);
-}
-
-.sample.many {
-  background: repeating-linear-gradient(45deg, #22c55e 0 6px, #3b82f6 6px 12px, #f97316 12px 18px, #8b5cf6 18px 24px);
-}
-
-@media (max-width: 1300px) {
-  .calendarGrid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .summaryGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 900px) {
-  .sidebar {
-    display: none;
-  }
-
-  .calendarGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .topbar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-  }
-}
-
-@media (max-width: 650px) {
-  .calendarGrid,
-  .summaryGrid {
-    grid-template-columns: 1fr;
-  }
-}
+/* --- NUSTATYMŲ LANKSTUMAS --- */
 .settingsTable {
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 20px;
-  overflow: hidden;
+  overflow-x: auto; /* Jei lentelė netelpa mažame ekrane, atsiras vidinė slinktis, o ne sulaužys puslapį */
 }
 
 .settingsHeader,
@@ -428,6 +463,7 @@ select {
   gap: 12px;
   align-items: center;
   padding: 14px 18px;
+  min-width: 650px; /* išlaiko stulpelių proporcijas prasukant lentelę */
 }
 
 .settingsHeader {
@@ -454,18 +490,23 @@ select {
   width: 18px;
   height: 18px;
 }
+
 .settingsAddBar {
   display: flex;
   gap: 12px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
+.settingsAddBar select,
 .settingsAddBar input {
   flex: 1;
+  min-width: 200px;
   border: 1px solid #d1d5db;
   border-radius: 12px;
   padding: 12px 14px;
   font-size: 14px;
+  background: white;
 }
 
 .settingsAddBar button {
@@ -477,55 +518,75 @@ select {
   font-weight: 700;
   cursor: pointer;
 }
-/* Viršutinės juostos elementų grupavimas */
-.topbarActions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
 
-/* Gražus atnaujinimo mygtukas */
-.refreshButton {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  color: #475569;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
+/* ==========================================================================
+   PAPILDOMI MEDIA QUERY REŽIMAI VISIŠKAM RESPONSIVE INTEGRAVIMUI (TEAMS & MOBILE)
+   ========================================================================== */
 
-.refreshButton:hover {
-  background-color: #f8fafc;
-  border-color: #cbd5e1;
-  color: #1e293b;
-}
-
-.refreshButton:active {
-  transform: scale(0.98);
-}
-
-.refreshButton:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* Sukimosi animacija (Spinning), kai kraunasi */
-.refreshButton.spinning svg {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
+@media (max-width: 1024px) {
+  .main {
+    padding: 20px;
   }
-  to {
-    transform: rotate(360deg);
+  .topbar h1 {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 900px) {
+  /* Atstatome tavo paslėptą sidebar, bet paverčiame jį lanksčiu viršutiniu meniu mobiliems / mažiems Teams langams */
+  .appShell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 16px 20px;
+    margin-bottom: 0;
+  }
+
+  .brand {
+    margin-bottom: 16px;
+  }
+
+  nav {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .navItem {
+    margin-bottom: 0;
+    padding: 10px 14px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .sidebarFooter {
+    display: none; /* Paslepiam apačią mažame ekrane, kad neužimtų vietos */
+  }
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: 16px;
+  }
+  .topbar h1 {
+    font-size: 22px;
+  }
+  .topbarActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .yearPicker button {
+    padding: 8px 12px;
+    font-size: 20px;
+  }
+  .yearPicker strong {
+    padding: 0 14px;
+    font-size: 16px;
   }
 }
