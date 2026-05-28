@@ -487,20 +487,18 @@ useEffect(() => {
     return Object.values(vacations).reduce((sum, arr) => sum + arr.length, 0);
   }, [vacations]);
 
-  if (!user) {
-    return (
-      <div className="loginPage">
-        <div className="loginCard">
-          <div className="logoCircle">A</div>
-          <h1>Atostogų kalendorius</h1>
-          <p>Prisijunk su Microsoft paskyra, kad matytum įmonės vartotojus.</p>
-          <button className="primaryButton" onClick={login}>
-            Prisijungti su Microsoft
-          </button>
-        </div>
+if (!user) {
+
+  login();
+
+  return (
+    <div className="loginPage">
+      <div className="loginCard">
+        <h1>Kraunama...</h1>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   return (
     <div className="appShell">
