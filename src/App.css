@@ -361,9 +361,8 @@ select {
 .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px !important;
-  width: 100%;
-  max-width: 250px; /* APRIBOJIMAS: Neleidžia visam mėnesiui išsipūsti ar išlipti */
+  gap: 4px !important; /* Sukuria nedidelius aiškius tarpus tarp dienų */
+  justify-items: center; /* LABAI SVARBU: neleidžia dienoms išsitempti į šonus */
 }
 
 
@@ -383,25 +382,22 @@ select {
 
 /* --- PAČIOS DIENOS IR JŲ HOVER REAKCIJA --- */
 .day {
-  aspect-ratio: 1 / 1; /* Išlaiko TOBULĄ kvadratą, kad ir kas nutiktų */
-  width: 100% !important; /* Langelis užpildo tik jam skirtą 1/7 dalį max-width ploto */
-  height: auto !important; /* Aukštis automatiškai susilygina su pločiu dėl aspect-ratio */
+  /* PANIKINAM visus senus išsitempimus ir nustatom tobulą mažą kvadratą */
+  width: 32px !important;  /* Užfiksuojam plotį */
+  height: 32px !important; /* Užfiksuojam aukštį – jokių aukštų kapsulių! */
   
   border: 0;
   background: #f8fafc;
-  border-radius: 8px;
+  border-radius: 8px; /* Kad kvadratėlis turėtų gražius suapvalintus kampus */
   cursor: pointer;
   position: relative;
-  overflow: hidden; /* Nukerta spalvas kampuose */
-  font-weight: 700;
-  font-size: 13px;
-  color: #0f172a;
+  overflow: hidden; /* Nukerta spalvas, kad jos neišliptų už kampų */
+  
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
   box-sizing: border-box;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 /* Hover efektas išlieka saugus ir gražus */
@@ -415,7 +411,7 @@ select {
 /* Spalvotas užpildymas viduje */
 .dayFill {
   position: absolute;
-  inset: 0;
+  inset: 0; /* Pilnai užpildo kvadratėlio vidų */
   z-index: 1;
   opacity: 0.95;
   border-radius: 8px;
@@ -424,6 +420,9 @@ select {
 .dayNumber {
   position: relative;
   z-index: 2;
+  font-weight: 700;
+  font-size: 13px;
+  color: #0f172a;
 }
 
 /* Savaitgaliai */
