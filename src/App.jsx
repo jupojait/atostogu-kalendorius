@@ -519,7 +519,6 @@ export default function App() {
               ))}
             </section>
 
-            {/* ČIA GENERUOJAMI VISI 12 MĖNESIŲ SU GULSČIAIS IR ŽEMAIS LANGELIAIS */}
             <div className="calendarGrid">
               {MONTHS.map((monthName, monthIndex) => {
                 const days = getMonthDays(year, monthIndex);
@@ -535,7 +534,8 @@ export default function App() {
                     
                     <div className="days">
                       {days.map((d, index) => {
-                        if (!d) return <div key={`empty-${monthIndex}-${index}`} style={{ height: '16px' }} />;
+                        // Pašalinau style={{ height: '16px' }}
+                        if (!d) return <div key={`empty-${monthIndex}-${index}`} className="emptyDay" />;
                         
                         const people = peopleOnDate(d.iso);
                         const isSelected = selectedPersonId && (vacations[selectedPersonId] || []).includes(d.iso);
@@ -545,18 +545,19 @@ export default function App() {
                         if (d.weekend) classes += " weekend";
                         if (hasVacation) classes += " hasVacation";
                         if (isSelected && selectedPersonId === accounts[0]?.id) classes += " selectedByCurrent";
-return (
-  <button
-    key={d.iso}
-    className={classes}
-    onClick={() => toggleDate(d.iso)}
-  >
-    {hasVacation && (
-      <div className="dayFill" style={dayBackground(people)} />
-    )}
-    <span className="dayNumber">{d.day}</span>
-  </button>
-);
+
+                        return (
+                          <button
+                            key={d.iso}
+                            className={classes}
+                            onClick={() => toggleDate(d.iso)}
+                          >
+                            {hasVacation && (
+                              <div className="dayFill" style={dayBackground(people)} />
+                            )}
+                            <span className="dayNumber">{d.day}</span>
+                          </button>
+                        );
                       })}
                     </div>
                   </div>
