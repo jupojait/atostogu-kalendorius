@@ -550,13 +550,12 @@ return (
   <button
     key={d.iso}
     className={classes}
-    style={hasVacation ? dayBackground(people) : {}}
     onClick={() => toggleDate(d.iso)}
   >
+    {hasVacation && (
+      <div className="dayFill" style={dayBackground(people)} />
+    )}
     <span className="dayNumber">{d.day}</span>
-  {/*people.length > 1 && (
-      <span className="moreBadge">+{people.length}</span>
-    )*/}
   </button>
 );
                       })}
