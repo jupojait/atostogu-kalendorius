@@ -535,7 +535,7 @@ export default function App() {
                     
                     <div className="days">
                       {days.map((d, index) => {
-                        if (!d) return <div key={`empty-${index}`} />;
+                        if (!d) return <div key={`empty-${monthIndex}-${index}`} style={{ height: '16px' }} />;
                         
                         const people = peopleOnDate(d.iso);
                         const isSelected = selectedPersonId && (vacations[selectedPersonId] || []).includes(d.iso);
