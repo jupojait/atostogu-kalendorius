@@ -545,7 +545,6 @@ export default function App() {
                         if (d.weekend) classes += " weekend";
                         if (hasVacation) classes += " hasVacation";
                         if (isSelected && selectedPersonId === accounts[0]?.id) classes += " selectedByCurrent";
-
 return (
   <button
     key={d.iso}
