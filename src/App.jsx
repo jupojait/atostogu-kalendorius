@@ -374,8 +374,7 @@ export default function App() {
           <div className={activePage === "calendar" ? "navItem active" : "navItem"} onClick={() => setActivePage("calendar")}>
             Kalendorius
           </div>
-          <div className="navItem">Mano dienos</div>
-          <div className="navItem">Komanda</div>
+      
           {isAdmin && (
             <div className={activePage === "settings" ? "navItem active" : "navItem"} onClick={() => setActivePage("settings")}>
               Nustatymai
