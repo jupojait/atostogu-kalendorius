@@ -412,7 +412,7 @@ select {
 /* Spalvotas užpildymas viduje idealiai prisitaiko prie žemo aukščio */
 .dayFill {
   position: absolute;
-  inset: 1px;
+  inset: 0;
   z-index: 1;
   border-radius: 3px;
 }
