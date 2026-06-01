@@ -45,6 +45,67 @@ function getMonthDays(year, month) {
   return days;
 }
 
+function getWesternEasterDate(year) {
+  const a = year % 19;
+  const b = Math.floor(year / 100);
+  const c = year % 100;
+  const d = Math.floor(b / 4);
+  const e = b % 4;
+  const f = Math.floor((b + 8) / 25);
+  const g = Math.floor((b - f + 1) / 3);
+  const h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4);
+  const k = c % 4;
+  const l = (32 + 2 * e + 2 * i - h - k) % 7;
+  const m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const month = Math.floor((h + l - 7 * m + 114) / 31) - 1;
+  const day = ((h + l - 7 * m + 114) % 31) + 1;
+
+  return new Date(year, month, day);
+}
+
+function addDays(date, days) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+function firstSunday(year, monthIndex) {
+  const date = new Date(year, monthIndex, 1);
+  const day = date.getDay();
+  const offset = day === 0 ? 0 : 7 - day;
+  date.setDate(1 + offset);
+  return date;
+}
+
+function dateToIso(date) {
+  return isoDate(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function getLithuanianPublicHolidays(year) {
+  const easterSunday = getWesternEasterDate(year);
+  const easterMonday = addDays(easterSunday, 1);
+
+  return new Set([
+    isoDate(year, 0, 1),    // Sausio 1
+    isoDate(year, 1, 16),   // Vasario 16
+    isoDate(year, 2, 11),   // Kovo 11
+    dateToIso(easterSunday),
+    dateToIso(easterMonday),
+    isoDate(year, 4, 1),    // Gegužės 1
+    dateToIso(firstSunday(year, 4)), // Motinos diena
+    dateToIso(firstSunday(year, 5)), // Tėvo diena
+    isoDate(year, 5, 24),   // Joninės
+    isoDate(year, 6, 6),    // Liepos 6
+    isoDate(year, 7, 15),   // Žolinė
+    isoDate(year, 10, 1),   // Visų Šventųjų diena
+    isoDate(year, 10, 2),   // Vėlinės
+    isoDate(year, 11, 24),  // Kūčios
+    isoDate(year, 11, 25),  // Kalėdos
+    isoDate(year, 11, 26)   // Kalėdų antroji diena
+  ]);
+}
+
 function dayBackground(people) {
   if (people.length === 0) return {};
   if (people.length === 1) return { background: people[0].color };
@@ -240,6 +301,7 @@ export default function App() {
 
   const selectedCount = selectedPersonId ? (vacations[selectedPersonId] || []).length : 0;
   const totalMarkedDays = useMemo(() => Object.values(vacations).reduce((sum, arr) => sum + arr.length, 0), [vacations]);
+  const lithuanianHolidays = useMemo(() => getLithuanianPublicHolidays(year), [year]);
 
   function peopleOnDate(date) {
     return officeUsers.filter(person => (vacations[person.id] || []).includes(date));
@@ -537,13 +599,15 @@ export default function App() {
                        if (!d) return <div key={`empty-${monthIndex}-${index}`} className="emptyDay" />;
                         
                         const people = peopleOnDate(d.iso);
-                        const isSelected = selectedPersonId && (vacations[selectedPersonId] || []).includes(d.iso);
-                        const hasVacation = people.length > 0;
+const isSelected = selectedPersonId && (vacations[selectedPersonId] || []).includes(d.iso);
+const hasVacation = people.length > 0;
+const isHoliday = lithuanianHolidays.has(d.iso);
                         
                         let classes = "day";
-                        if (d.weekend) classes += " weekend";
-                        if (hasVacation) classes += " hasVacation";
-                        if (isSelected) classes += " selectedByCurrent";
+if (d.weekend) classes += " weekend";
+if (isHoliday) classes += " holiday";
+if (hasVacation) classes += " hasVacation";
+if (isSelected) classes += " selectedByCurrent";
 
  return (
   <button
