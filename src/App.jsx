@@ -535,7 +535,7 @@ export default function App() {
                     
                     <div className="days">
                       {days.map((d, index) => {
-                       if (!d) return <div key={`empty-${monthIndex}-${index}`} style={{ height: '16px' }} />;
+                       if (!d) return <div key={`empty-${monthIndex}-${index}`} className="emptyDay" />;
                         
                         const people = peopleOnDate(d.iso);
                         const isSelected = selectedPersonId && (vacations[selectedPersonId] || []).includes(d.iso);
@@ -544,7 +544,7 @@ export default function App() {
                         let classes = "day";
                         if (d.weekend) classes += " weekend";
                         if (hasVacation) classes += " hasVacation";
-                        if (isSelected && selectedPersonId === accounts[0]?.id) classes += " selectedByCurrent";
+                        if (isSelected) classes += " selectedByCurrent";
 
  return (
   <button

@@ -337,6 +337,7 @@ select {
   grid-template-columns: repeat(auto-fill, 200px);
   gap: 14px;
   justify-content: start;
+  align-items: start;
 }
 
 .monthCard {
@@ -380,14 +381,16 @@ select {
 }
 
 .days {
-  grid-auto-rows: 22px;
+  grid-auto-rows: auto;
 }
 
-.day {
+.day,
+.emptyDay {
   width: 100%;
-  height: 22px;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  min-height: 0;
   border: 0;
-  cursor: pointer;
   position: relative;
   display: flex;
   align-items: center;
@@ -396,6 +399,14 @@ select {
   box-sizing: border-box;
   border-radius: 3px;
   overflow: hidden;
+}
+
+.day {
+  cursor: pointer;
+}
+
+.emptyDay {
+  cursor: default;
 }
 
 .day.weekend {
