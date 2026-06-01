@@ -546,21 +546,19 @@ export default function App() {
                         if (hasVacation) classes += " hasVacation";
                         if (isSelected && selectedPersonId === accounts[0]?.id) classes += " selectedByCurrent";
 
-                        return (
-                          <button 
-                            key={d.iso} 
-                            className={classes} 
-                            onClick={() => toggleDate(d.iso)}
-                          >
-                            {hasVacation && (
-                              <div className="dayFill" style={dayBackground(people)} />
-                            )}
-                            <span className="dayNumber">{d.day}</span>
-                            {people.length > 1 && (
-                              <span className="moreBadge">+{people.length}</span>
-                            )}
-                          </button>
-                        );
+ return (
+  <button
+    key={d.iso}
+    className={classes}
+    style={hasVacation ? dayBackground(people) : {}}
+    onClick={() => toggleDate(d.iso)}
+  >
+    <span className="dayNumber">{d.day}</span>
+    {people.length > 1 && (
+      <span className="moreBadge">+{people.length}</span>
+    )}
+  </button>
+);
                       })}
                     </div>
                   </div>
