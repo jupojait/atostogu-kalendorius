@@ -372,8 +372,8 @@ select {
 .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-  align-content: start; 
+  gap: 2px;
+  align-content: start;
 }
 
 .weekdays div {
@@ -395,7 +395,7 @@ select {
 /* --- PAČIOS DIENOS IR JŲ FORMOS --- */
 .day {
   width: 100%;
-  height: 21px;
+  height: 19px;
   border: 0;
   background: transparent;
   cursor: pointer;
