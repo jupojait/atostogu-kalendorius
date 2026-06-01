@@ -554,9 +554,9 @@ export default function App() {
     onClick={() => toggleDate(d.iso)}
   >
     <span className="dayNumber">{d.day}</span>
-    {people.length > 1 && (
+    {/*people.length > 1 && (
       <span className="moreBadge">+{people.length}</span>
-    )}
+    )*/}
   </button>
 );
                       })}
