@@ -335,19 +335,22 @@ select {
    ========================================================================== */
 .calendarGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 200px));
   gap: 14px;
+  justify-content: start;
 }
 
 .monthCard {
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 22px;
-  padding: 16px;
+  padding: 12px;
   box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
   display: flex;
   flex-direction: column;
-  height: fit-content; /* PRIDĖK ŠITĄ: neleis kortelei temptis per visą ekraną */
+  height: fit-content;
+  width: 200px;
+  box-sizing: border-box;
 }
 
 .monthHeader h3 {
@@ -392,10 +395,7 @@ select {
 /* --- PAČIOS DIENOS IR JŲ FORMOS --- */
 .day {
   width: 100%;
-  aspect-ratio: 1 / 1;
-  height: auto !important;
-  max-height: 36px; /* ← riboja maksimalų dydį */
-  
+  height: 32px;
   border: 0;
   background: transparent;
   cursor: pointer;
