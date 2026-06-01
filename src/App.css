@@ -413,12 +413,7 @@ select {
   font-size: 11px;
   color: #0f172a;
 }
-.dayFill {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  border-radius: 3px;
-}
+
 .moreBadge {
   position: absolute;
   z-index: 3;
