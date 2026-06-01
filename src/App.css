@@ -412,9 +412,9 @@ select {
 /* Spalvotas užpildymas viduje idealiai prisitaiko prie žemo aukščio */
 .dayFill {
   position: absolute;
-  inset: 0;
+  inset: 1px;
   z-index: 1;
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 .dayNumber {
@@ -429,7 +429,7 @@ select {
 .day.weekend {
   background: #fff1f2;
   color: #dc2626;
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 .day.weekend.hasVacation .dayNumber {
