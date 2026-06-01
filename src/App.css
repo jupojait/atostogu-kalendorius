@@ -13,7 +13,6 @@ select {
   font: inherit;
 }
 
-/* --- LOGIN PUSLAPIS --- */
 .loginPage {
   min-height: 100vh;
   display: grid;
@@ -59,7 +58,7 @@ select {
 }
 
 /* ==========================================================================
-   2. STRUKTŪRA (STRUKTŪRINIAI RĖMAI IR ŠONINIS MENIU)
+   2. STRUKTŪRA
    ========================================================================== */
 .appShell {
   display: flex;
@@ -130,7 +129,7 @@ select {
 }
 
 /* ==========================================================================
-   3. VIRŠUTINĖ JUOSTA (TOPBAR IR VALDYMAS)
+   3. TOPBAR
    ========================================================================== */
 .topbar {
   display: flex;
@@ -222,7 +221,7 @@ select {
 }
 
 /* ==========================================================================
-   4. INFORMACINĖS PLOKŠTĖS IR DARBUOTOJŲ SĄRAŠAS
+   4. SUMMARY IR DARBUOTOJAI
    ========================================================================== */
 .summaryGrid {
   display: grid;
@@ -331,11 +330,11 @@ select {
 }
 
 /* ==========================================================================
-   5. SUTVARKYTAS KALENDORIUS (DIENOS IR JŲ TARPAI)
+   5. KALENDORIUS
    ========================================================================== */
 .calendarGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 200px));
+  grid-template-columns: repeat(auto-fill, 200px);
   gap: 14px;
   justify-content: start;
 }
@@ -346,20 +345,17 @@ select {
   border-radius: 22px;
   padding: 12px;
   box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
-  display: flex;
-  flex-direction: column;
-  height: fit-content;
   width: 200px;
   box-sizing: border-box;
+  height: fit-content;
 }
 
 .monthHeader h3 {
-  margin: 0 0 8px;  /* buvo 14px */
-  font-size: 15px;  /* buvo 18px */
+  margin: 0 0 8px;
+  font-size: 15px;
   text-align: center;
 }
 
-/* SUTVARKYTA: Pašalintas iškreipiantis „justify-items: center“ */
 .weekdays,
 .days {
   display: grid;
@@ -367,17 +363,12 @@ select {
   gap: 2px;
 }
 
-.days {
-  grid-auto-rows: 22px;
-  align-content: start;
-}
-
 .weekdays div {
   text-align: center;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   color: #64748b;
-  height: 20px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -388,13 +379,13 @@ select {
   color: #dc2626;
 }
 
-/* --- PAČIOS DIENOS IR JŲ FORMOS --- */
+.days {
+  grid-auto-rows: 22px;
+}
+
 .day {
   width: 100%;
   height: 22px;
-  min-height: 22px;
-  max-height: 22px;
-  overflow: hidden;
   border: 0;
   cursor: pointer;
   position: relative;
@@ -404,64 +395,43 @@ select {
   padding: 0;
   box-sizing: border-box;
   border-radius: 3px;
+  overflow: hidden;
 }
 
-.day:hover {
-  transform: none;
-  z-index: 10;
+.day.weekend {
+  background: #fff1f2;
 }
 
-/* Spalvotas užpildymas viduje idealiai prisitaiko prie žemo aukščio */
-.dayFill {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  border-radius: 3px;
+.day.weekend .dayNumber {
+  color: #dc2626;
 }
 
 .dayNumber {
   position: relative;
   z-index: 2;
   font-weight: 700;
-  font-size: 11px;  /* buvo 13px */
+  font-size: 11px;
   color: #0f172a;
-}
-
-/* Savaitgaliai */
-.day.weekend {
-  background: #fff1f2;
-  color: #dc2626;
-  border-radius: 3px;
-}
-
-.day.weekend.hasVacation .dayNumber {
-  color: #dc2626;
-}
-
-.hasVacation {
-  background: transparent;
-}
-
-/* Pasirinkta diena (rėmelis) */
-.selectedByCurrent {
-  box-shadow: inset 0 0 0 2px #111827 !important;
-  border-radius: 4px;
 }
 
 .moreBadge {
   position: absolute;
   z-index: 3;
-  right: 2px;
-  bottom: 1px;
+  right: 1px;
+  bottom: 0px;
   background: #111827;
   color: white;
   border-radius: 999px;
-  padding: 1px 4px;
-  font-size: 9px;
+  padding: 1px 3px;
+  font-size: 8px;
+}
+
+.selectedByCurrent {
+  box-shadow: inset 0 0 0 2px #111827 !important;
 }
 
 /* ==========================================================================
-   6. PERSIDENGIMŲ LEGENDA IR KITI ELEMENTAI
+   6. LEGENDA IR NUSTATYMAI
    ========================================================================== */
 .overlapLegend {
   margin-top: 18px;
@@ -559,34 +529,22 @@ select {
 }
 
 /* ==========================================================================
-   7. EKRAREKOMENDACIJOS (RESPONSIVE MEDIA QUERIES)
+   7. RESPONSIVE
    ========================================================================== */
 @media (max-width: 1024px) {
-  .main {
-    padding: 20px;
-  }
-  .topbar h1 {
-    font-size: 26px;
-  }
+  .main { padding: 20px; }
+  .topbar h1 { font-size: 26px; }
 }
 
 @media (max-width: 900px) {
-  .appShell {
-    flex-direction: column;
-  }
-
+  .appShell { flex-direction: column; }
   .sidebar {
     width: 100%;
     border-right: none;
     border-bottom: 1px solid #e5e7eb;
     padding: 16px 20px;
-    margin-bottom: 0;
   }
-
-  .brand {
-    margin-bottom: 16px;
-  }
-
+  .brand { margin-bottom: 16px; }
   nav {
     display: flex;
     flex-direction: row;
@@ -594,36 +552,19 @@ select {
     overflow-x: auto;
     padding-bottom: 4px;
   }
-
   .navItem {
     margin-bottom: 0;
     padding: 10px 14px;
     font-size: 14px;
     white-space: nowrap;
   }
-
-  .sidebarFooter {
-    display: none;
-  }
+  .sidebarFooter { display: none; }
 }
 
 @media (max-width: 480px) {
-  .main {
-    padding: 16px;
-  }
-  .topbar h1 {
-    font-size: 22px;
-  }
-  .topbarActions {
-    width: 100%;
-    justify-content: space-between;
-  }
-  .yearPicker button {
-    padding: 8px 12px;
-    font-size: 20px;
-  }
-  .yearPicker strong {
-    padding: 0 14px;
-    font-size: 16px;
-  }
+  .main { padding: 16px; }
+  .topbar h1 { font-size: 22px; }
+  .topbarActions { width: 100%; justify-content: space-between; }
+  .yearPicker button { padding: 8px 12px; font-size: 20px; }
+  .yearPicker strong { padding: 0 14px; font-size: 16px; }
 }
