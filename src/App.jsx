@@ -505,14 +505,17 @@ export default function App() {
 
             <section className="peopleLegend">
               {officeUsers.map(person => (
-<button
-  key={person.id}
-  className={person.id === selectedPersonId ? "personChip selected" : "personChip"}
-  onClick={() => setSelectedPersonId(person.id)}
-  data-name={person.name}
->
-  <span style={{ backgroundColor: person.color }}>{person.initials}</span>
-</button>
+                <button
+                  key={person.id}
+                  className={person.id === selectedPersonId ? "personChip selected" : "personChip"}
+                  onClick={() => setSelectedPersonId(person.id)}
+                >
+                  <span style={{ backgroundColor: person.color }}>{person.initials}</span>
+                  <div>
+                    <strong>{person.name}</strong>
+                    <small>{person.email}</small>
+                  </div>
+                </button>
               ))}
             </section>
 
