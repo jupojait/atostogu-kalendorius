@@ -337,7 +337,576 @@ select {
 }
 
 .personChip strong {
+  display: block;/* ==========================================================================
+   1. PAGRINDINIAI NUSTATYMAI IR BENDRI STILIAI
+   ========================================================================== */
+body {
+  margin: 0;
+  font-family: Segoe UI, Arial, sans-serif;
+  background: #f5f7fb;
+  color: #0f172a;
+}
+
+button,
+select {
+  font: inherit;
+}
+
+.loginPage {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #eff6ff, #f0fdf4);
+  padding: 16px;
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 420px;
+  background: white;
+  border-radius: 28px;
+  padding: 36px 24px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+  text-align: center;
+}
+
+.logoCircle,
+.brandIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: #22c55e;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+.logoCircle {
+  margin: 0 auto 18px;
+}
+
+.primaryButton {
+  background: #2563eb;
+  color: white;
+  border: 0;
+  border-radius: 14px;
+  padding: 14px 22px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   2. STRUKTŪRA
+   ========================================================================== */
+.appShell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 260px;
+  background: white;
+  border-right: 1px solid #e5e7eb;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.brand span,
+.sidebarFooter span {
   display: block;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.navItem {
+  padding: 13px 16px;
+  border-radius: 14px;
+  margin-bottom: 8px;
+  color: #475569;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.navItem.active {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.sidebarFooter {
+  margin-top: auto;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 18px;
+}
+
+.sidebarFooter button {
+  margin-top: 12px;
+  border: 0;
+  background: #fee2e2;
+  color: #b91c1c;
+  border-radius: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 700;
+  width: 100%;
+}
+
+.main {
+  flex: 1;
+  padding: 28px;
+  min-width: 0;
+}
+
+/* ==========================================================================
+   3. TOPBAR
+   ========================================================================== */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.topbar p {
+  margin: 6px 0 0;
+  color: #64748b;
+}
+
+.topbarActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.refreshButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  white-space: nowrap;
+}
+
+.refreshButton:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+.refreshButton:active {
+  transform: scale(0.98);
+}
+
+.refreshButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.refreshButton.spinning svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.yearPicker {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.yearPicker button {
+  border: 0;
+  background: white;
+  padding: 10px 16px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.yearPicker strong {
+  padding: 0 20px;
+  font-size: 20px;
+}
+
+/* ==========================================================================
+   4. SUMMARY IR DARBUOTOJAI
+   ========================================================================== */
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.summaryCard {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.summaryCard span {
+  display: block;
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.summaryCard strong {
+  font-size: 22px;
+  word-break: break-word;
+}
+
+.summaryCard small {
+  display: block;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.summaryCard select {
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 10px;
+  outline: none;
+  background: white;
+}
+
+.notice {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 16px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.peopleLegend {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 14px;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  margin-bottom: 18px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.personChip {
+  min-width: 210px;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  cursor: pointer;
+  text-align: left;
+  flex-shrink: 0;
+}
+
+.personChip.selected {
+  outline: 3px solid #111827;
+  background: white;
+}
+
+.personChip span {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  flex: none;
+}
+
+.personChip strong {
+  display: block;
+  font-size: 14px;
+}
+
+.personChip small {
+  color: #64748b;
+  font-size: 11px;
+}
+
+/* ==========================================================================
+   5. KALENDORIUS
+   ========================================================================== */
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 200px);
+  gap: 14px;
+  justify-content: start;
+}
+
+.monthCard {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 22px;
+  padding: 12px;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+  width: 200px;
+  box-sizing: border-box;
+  height: fit-content;
+}
+
+.monthHeader h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  text-align: center;
+}
+
+.weekdays,
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.weekdays div {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748b;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weekdays div:nth-child(6),
+.weekdays div:nth-child(7) {
+  color: #dc2626;
+}
+
+.days {
+  grid-auto-rows: 22px;
+}
+
+.day {
+  width: 100%;
+  height: 22px;
+  border: 0;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-sizing: border-box;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.day.weekend {
+  background: #fff1f2;
+}
+
+.day.weekend .dayNumber {
+  color: #dc2626;
+}
+
+.dayNumber {
+  position: relative;
+  z-index: 2;
+  font-weight: 700;
+  font-size: 11px;
+  color: #0f172a;
+}
+
+.moreBadge {
+  position: absolute;
+  z-index: 3;
+  right: 1px;
+  bottom: 0px;
+  background: #111827;
+  color: white;
+  border-radius: 999px;
+  padding: 1px 3px;
+  font-size: 8px;
+}
+
+.selectedByCurrent {
+  box-shadow: inset 0 0 0 2px #111827 !important;
+}
+
+/* ==========================================================================
+   6. LEGENDA IR NUSTATYMAI
+   ========================================================================== */
+.overlapLegend {
+  margin-top: 18px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sample {
+  width: 36px;
+  height: 24px;
+  border-radius: 7px;
+  display: inline-block;
+}
+
+.sample.one { background: linear-gradient(135deg, #22c55e 0 50%, transparent 50% 100%); }
+.sample.two { background: linear-gradient(135deg, #22c55e 0 50%, #3b82f6 50% 100%); }
+.sample.three { background: conic-gradient(#22c55e 0deg 120deg, #3b82f6 120deg 240deg, #f97316 240deg 360deg); }
+.sample.four { background: conic-gradient(#22c55e 0deg 90deg, #3b82f6 90deg 180deg, #f97316 180deg 270deg, #8b5cf6 270deg 360deg); }
+.sample.many { background: repeating-linear-gradient(45deg, #22c55e 0 6px, #3b82f6 6px 12px, #f97316 12px 18px, #8b5cf6 18px 24px); }
+
+.settingsTable {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  overflow-x: auto;
+}
+
+.settingsHeader,
+.settingsRow {
+  display: grid;
+  grid-template-columns: 1.5fr 2fr 1fr 1fr 120px;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 18px;
+  min-width: 650px;
+}
+
+.settingsHeader {
+  background: #f8fafc;
+  font-weight: 800;
+  color: #475569;
+}
+
+.settingsRow {
+  border-top: 1px solid #e5e7eb;
+}
+
+.settingsRow button {
+  border: 0;
+  background: #2563eb;
+  color: white;
+  border-radius: 10px;
+  padding: 9px 12px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.settingsRow input {
+  width: 18px;
+  height: 18px;
+}
+
+.settingsAddBar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.settingsAddBar select,
+.settingsAddBar input {
+  flex: 1;
+  min-width: 200px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  background: white;
+}
+
+.settingsAddBar button {
+  border: 0;
+  background: #2563eb;
+  color: white;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   7. RESPONSIVE
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .main { padding: 20px; }
+  .topbar h1 { font-size: 26px; }
+}
+
+@media (max-width: 900px) {
+  .appShell { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 16px 20px;
+  }
+  .brand { margin-bottom: 16px; }
+  nav {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .navItem {
+    margin-bottom: 0;
+    padding: 10px 14px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .sidebarFooter { display: none; }
+}
+
+@media (max-width: 480px) {
+  .main { padding: 16px; }
+  .topbar h1 { font-size: 22px; }
+  .topbarActions { width: 100%; justify-content: space-between; }
+  .yearPicker button { padding: 8px 12px; font-size: 20px; }
+  .yearPicker strong { padding: 0 14px; font-size: 16px; }
+}
   font-size: 14px;
 }
 
