@@ -354,8 +354,8 @@ select {
 }
 
 .monthHeader h3 {
-  margin: 0 0 14px;
-  font-size: 18px;
+  margin: 0 0 8px;  /* buvo 14px */
+  font-size: 15px;  /* buvo 18px */
   text-align: center;
 }
 
@@ -425,7 +425,7 @@ select {
   position: relative;
   z-index: 2;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 11px;  /* buvo 13px */
   color: #0f172a;
 }
 
