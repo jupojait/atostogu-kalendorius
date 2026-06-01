@@ -306,6 +306,25 @@ select {
   background: white;
 }
 
+.personChip {
+  min-width: 210px;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  cursor: pointer;
+  text-align: left;
+  flex-shrink: 0;
+}
+
+.personChip.selected {
+  outline: 3px solid #111827;
+  background: white;
+}
+
 .personChip span {
   width: 38px;
   height: 38px;
@@ -317,26 +336,14 @@ select {
   flex: none;
 }
 
-.personChip strong,
-.personChip small,
-.personChip div {
-  display: none;
+.personChip strong {
+  display: block;
+  font-size: 14px;
 }
 
-.personChip:hover::after {
-  content: attr(data-name);
-  position: absolute;
-  bottom: -32px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #111827;
-  color: white;
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  white-space: nowrap;
-  z-index: 100;
-  pointer-events: none;
+.personChip small {
+  color: #64748b;
+  font-size: 11px;
 }
 
 /* ==========================================================================
