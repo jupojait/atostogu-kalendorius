@@ -394,7 +394,6 @@ select {
   height: 22px;
   overflow: hidden;
   border: 0;
-  background: transparent;
   cursor: pointer;
   position: relative;
   display: flex;
@@ -402,6 +401,7 @@ select {
   justify-content: center;
   padding: 0;
   box-sizing: border-box;
+  border-radius: 3px;
 }
 
 .day:hover {
